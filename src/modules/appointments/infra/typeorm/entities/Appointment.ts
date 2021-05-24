@@ -7,7 +7,7 @@ import {
     ManyToOne,
     JoinColumn,
 } from 'typeorm';
-import User from './User';
+import User from '@modules/users/infra/typeorm/entities/User';
 /** a geração de um id automático será feito pelo @PrimaryGeneratedColumn('uuid')
 import { v4 as uuid } from 'uuid';
 */

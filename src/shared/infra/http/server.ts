@@ -4,11 +4,11 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
 
-import routes from './routes';
-import uploadConfig from './config/upload';
-import AppError from './errors/AppError';
+import uploadConfig from '@config/upload';
+import routes from '@shared/infra/http/routes';
+import AppError from '@shared/errors/AppError';
 
-import './database';
+import '@shared/infra/typeorm';
 
 const PORT = 3333;
 
@@ -45,5 +45,5 @@ app.use(
 
 app.listen(PORT, () => {
     // eslint-disable-next-line no-console
-    console.log('Servidor rodando na porta', PORT);
+    console.log('🚀 *** Servidor rodando na porta: ', PORT, ' *** 🚀');
 });

@@ -19,9 +19,10 @@ Projeto backend da aplicação GoBarber desenvolvido em aula no curso Bootcamp -
 
 Aqui esta uma print dos testes realizados utilizando o Insomnia.
 <div>
-<img alt="GoStack" width="200px" src="assets/run-server.png" />
-<img alt="GoStack" width=200px src="assets/server-session.png" />
-<img alt="GoStack" width=200px src="assets/server-appointments-list.png" />
+<img alt="GoStack" width="200px" src="assets/print_server_001.png" />
+<img alt="GoStack" width="200px" src="assets/print_server_002.png" />
+<img alt="GoStack" width="200px" src="assets/print_server_003.png" />
+<img alt="GoStack" width="200px" src="assets/print_server_004.png" />
 </div>
 
 

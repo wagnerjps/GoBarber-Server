@@ -25,7 +25,6 @@ Aqui esta uma print dos testes realizados utilizando o Insomnia.
 <img alt="GoStack" width="200px" src="assets/print_server_004.png" />
 </div>
 
-
 ## :snowflake: Instalation
 
 Para instalação, clone o projeto e execute o comando:

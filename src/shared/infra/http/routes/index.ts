@@ -6,7 +6,10 @@ import sessionsRoutes from '@modules/users/infra/http/routes/sessions.routes';
 const routes = Router();
 
 routes.use('/appointments', appointmentsRoutes);
+
 routes.use('/users', usersRoutes);
+routes.get('/userbymail', usersRoutes);
+routes.get('/userbyname', usersRoutes);
 
 routes.use('/sessions', sessionsRoutes);
 

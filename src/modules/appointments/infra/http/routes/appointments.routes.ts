@@ -1,25 +1,36 @@
 import { Router } from 'express';
 import { parseISO } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
+import { container } from 'tsyringe';
 
-import AppointmentsRepository from '@modules/appointments/repositories/AppointmentsRepository';
+import AppointmentsRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentsRepository';
 import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
 
 import ensureAuthorizated from '@modules/users/infra/http/middleware/ensureAuthorizated';
 
 const appointmentsRoutes = Router();
+
 /* Não será mais necessário no typeorm
 const appointmentRepository = new AppointmentsRepository();
  */
 
 appointmentsRoutes.use(ensureAuthorizated);
 
-// ROUTE GET
+// ROUTE GET - Aguardando
+
 appointmentsRoutes.get('/', async (request, response) => {
     // Criando o appointmentRepository com getCustomRepository
-    const appointmentRepository = getCustomRepository(AppointmentsRepository);
+    // Não é mais necessário
+    // const appointmentRepository = getCustomRepository(AppointmentsRepository);
     // LIST --- Alterado o metodo all() para find
-    const appointments = await appointmentRepository.find();
+
+    const { date } = request.body;
+
+    const appointmentRepository = container.resolve(AppointmentsRepository);
+    const appointments = await appointmentRepository.findByDate(date);
+
+    // eslint-disable-next-line no-console
+    console.log(`${date} #$# ${appointments}`);
+
     return response.status(200).json(appointments);
 });
 
@@ -29,8 +40,9 @@ appointmentsRoutes.post('/', async (request, response) => {
 
     const parsedDate = parseISO(date);
 
-    // Não passamos mais o appointmentRepository
-    const createAppointmentService = new CreateAppointmentService();
+    const createAppointmentService = container.resolve(
+        CreateAppointmentService,
+    );
 
     // Necessário usar async/await
     const appointment = await createAppointmentService.execute({

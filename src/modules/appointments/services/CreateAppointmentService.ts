@@ -1,17 +1,30 @@
 import { startOfHour } from 'date-fns';
-import { getCustomRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 
 import Appointment from '../infra/typeorm/entities/Appointment';
-import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import IAppointmentsRepository from '../repositories/IAppointmentsRepository';
 
-interface Request {
+/* SOLID
+        [v] Single Responsability Principle
+        [ ] Open Cloded Principle
+        [v] Liskov Substitution Principle
+        [ ] Interface Segregation Principle
+        [v] Dependency Invertion Principle
+*/
+interface IRequest {
     provider_id: string;
     date: Date;
 }
 
+@injectable()
 class CreateAppointmentService {
+    constructor(
+        @inject('AppointmentsRepository')
+        private appointmentsRepository: IAppointmentsRepository,
+    ) {}
+
     /* Não será mais necessário no typeorm
     private appointmentsRepository: AppointmentsRepository;
 
@@ -19,10 +32,16 @@ class CreateAppointmentService {
         this.appointmentsRepository = appointmentsRepository;
     } */
 
-    public async execute({ provider_id, date }: Request): Promise<Appointment> {
+    public async execute({
+        provider_id,
+        date,
+    }: IRequest): Promise<Appointment> {
+        // Não será mais utilizado
+        /*
         const appointmentsRepository = getCustomRepository(
             AppointmentsRepository,
         );
+        */
 
         const appointmentDate = startOfHour(date);
 
@@ -34,7 +53,7 @@ class CreateAppointmentService {
             appointmentDate,
         ); */
 
-        const findAppointmentInSameProviderAndDate = await appointmentsRepository.findByProviderAndDate(
+        const findAppointmentInSameProviderAndDate = await this.appointmentsRepository.findByProviderAndDate(
             provider_id,
             appointmentDate,
         );
@@ -44,13 +63,14 @@ class CreateAppointmentService {
         }
 
         // CREATE --- removido o this de this.appointmentsRepository.findByDate
-        const appointment = appointmentsRepository.create({
+        const appointment = await this.appointmentsRepository.create({
             provider_id,
             date: appointmentDate,
         });
 
         // Com o modelo typeorm é necessário utilizar o save
-        await appointmentsRepository.save(appointment);
+        // Salva no repositório
+        // await appointmentsRepository.save(appointment);
 
         return appointment;
     }

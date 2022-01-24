@@ -5,13 +5,15 @@ import multer from 'multer';
 import uploadConfig from '@config/upload';
 
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
-import CreateUserService from '@modules/users/services/CreateUserService';
-import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService';
 
 import ensureAuthorizated from '../middleware/ensureAuthorizated';
+import UsersControllers from '../controllers/UsersControllers';
+import UserAvatarController from '../controllers/UserAvatarController';
 
 const usersRoutes = Router();
 const upload = multer(uploadConfig);
+const usersController = new UsersControllers();
+const userAvatarController = new UserAvatarController();
 
 // Adicionada interface para solucionar erro do TS ao deletar o campo "password" do objeto user
 interface IUser {
@@ -40,41 +42,14 @@ usersRoutes.get('/userbymail', async (request, response) => {
 });
 
 // ROUTE POST
-usersRoutes.post('/', async (request, response) => {
-    const { name, email, password } = request.body;
-
-    const createUser = container.resolve(CreateUserService);
-
-    const user: IUser = await createUser.execute({
-        name,
-        email,
-        password,
-    });
-
-    delete user.password;
-
-    return response.json(user);
-});
+usersRoutes.post('/', usersController.create);
 
 // ROUTE AVATAR UPDALOAD
 usersRoutes.patch(
     '/avatar',
     ensureAuthorizated,
     upload.single('avatar'),
-    async (request, response) => {
-        const updateUserAvatarService = container.resolve(
-            UpdateUserAvatarService,
-        );
-
-        const user: IUser = await updateUserAvatarService.execute({
-            user_id: request.user.id,
-            avatarFilename: request.file.filename,
-        });
-
-        delete user.password;
-
-        return response.status(200).json(user);
-    },
+    userAvatarController.update,
 );
 
 export default usersRoutes;

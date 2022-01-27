@@ -23,6 +23,25 @@ describe('CreateUser', () => {
         expect(user).toHaveProperty('id');
     });
 
+    it('should not be able to create new user if same already exists', async () => {
+        const fakeUsersRepository = new FakeUsersRepository();
+        const fakeHashProvider = new FakeHashProvider();
+        const createUser = new CreateUserService(
+            fakeUsersRepository,
+            fakeHashProvider,
+        );
+
+        await createUser.execute(newUser);
+
+        await expect(
+            createUser.execute({
+                name: 'John Doe',
+                email: 'johndoe@exemple.com',
+                password: '654321',
+            }),
+        ).rejects.toBeInstanceOf(AppError);
+    });
+
     it('should not be able to create two user on the same time', async () => {
         const fakeUsersRepository = new FakeUsersRepository();
         const fakeHashProvider = new FakeHashProvider();

@@ -10,7 +10,7 @@ import ensureAuthorizated from '../middleware/ensureAuthorizated';
 import UsersControllers from '../controllers/UsersControllers';
 import UserAvatarController from '../controllers/UserAvatarController';
 
-const usersRoutes = Router();
+const usersRouter = Router();
 const upload = multer(uploadConfig);
 const usersController = new UsersControllers();
 const userAvatarController = new UserAvatarController();
@@ -22,7 +22,7 @@ interface IUser {
     password?: string;
 }
 // ROUTE GET USER BY EMAIL
-usersRoutes.get('/userbyname', async (request, response) => {
+usersRouter.get('/userbyname', async (request, response) => {
     const { name } = request.body;
 
     const usersRepository = container.resolve(UsersRepository);
@@ -32,7 +32,7 @@ usersRoutes.get('/userbyname', async (request, response) => {
 });
 
 // ROUTE GET USER BY EMAIL
-usersRoutes.get('/userbymail', async (request, response) => {
+usersRouter.get('/userbymail', async (request, response) => {
     const { email } = request.body;
 
     const usersRepository = container.resolve(UsersRepository);
@@ -42,14 +42,14 @@ usersRoutes.get('/userbymail', async (request, response) => {
 });
 
 // ROUTE POST
-usersRoutes.post('/', usersController.create);
+usersRouter.post('/', usersController.create);
 
 // ROUTE AVATAR UPDALOAD
-usersRoutes.patch(
+usersRouter.patch(
     '/avatar',
     ensureAuthorizated,
     upload.single('avatar'),
     userAvatarController.update,
 );
 
-export default usersRoutes;
+export default usersRouter;

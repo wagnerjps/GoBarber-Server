@@ -18,6 +18,14 @@
     - O usuário precisa confirmar a nova senha ao resetar sua senha;
 
 
+## Teste produção
+    - Rotas e Controllers
+    - Repositórios de tokens (TypeORM)
+    - Criar Migration de tokens
+    - Provider de envio de e-mail (DEV)
+    - Registrar providers no container
+    - Testar tudo!
+
 # Atualização do perfil
 
 **RF**

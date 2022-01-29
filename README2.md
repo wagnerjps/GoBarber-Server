@@ -19,11 +19,11 @@
 
 
 ## Teste produção
-    - Rotas e Controllers
-    - Repositórios de tokens (TypeORM)
-    - Criar Migration de tokens
+    - Rotas e Controllers                   ok
+    - Repositórios de tokens (TypeORM)      ok
+    - Criar Migration de tokens             ok
     - Provider de envio de e-mail (DEV)
-    - Registrar providers no container
+    - Registrar providers no container      ok
     - Testar tudo!
 
 # Atualização do perfil

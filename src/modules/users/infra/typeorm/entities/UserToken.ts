@@ -11,7 +11,7 @@ import {
 import { v4 as uuid } from 'uuid';
 */
 
-@Entity('users')
+@Entity('user_tokens')
 class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;

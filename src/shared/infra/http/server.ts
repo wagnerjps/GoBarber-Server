@@ -22,7 +22,7 @@ app.use(
     }),
 );
 app.use(express.json());
-app.use('/files', express.static(uploadConfig.tempFolder));
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
 
 app.use(

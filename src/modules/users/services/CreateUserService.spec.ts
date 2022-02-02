@@ -3,7 +3,20 @@ import FakeHashProvider from '../providers/HashpProvider/fakes/FakeHashProvider'
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import CreateUserService from './CreateUserService';
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUser: CreateUserService;
+
 describe('CreateUser', () => {
+    beforeEach(() => {
+        fakeUsersRepository = new FakeUsersRepository();
+        fakeHashProvider = new FakeHashProvider();
+        createUser = new CreateUserService(
+            fakeUsersRepository,
+            fakeHashProvider,
+        );
+    });
+
     const newUser = {
         name: 'John Doe',
         email: 'johndoe@exemple.com',
@@ -11,26 +24,12 @@ describe('CreateUser', () => {
     };
 
     it('should be able to create a new user', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-
         const user = await createUser.execute(newUser);
 
         expect(user).toHaveProperty('id');
     });
 
     it('should not be able to create new user if same already exists', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-
         await createUser.execute(newUser);
 
         await expect(
@@ -43,13 +42,6 @@ describe('CreateUser', () => {
     });
 
     it('should not be able to create two user on the same time', async () => {
-        const fakeUsersRepository = new FakeUsersRepository();
-        const fakeHashProvider = new FakeHashProvider();
-        const createUser = new CreateUserService(
-            fakeUsersRepository,
-            fakeHashProvider,
-        );
-
         await createUser.execute(newUser);
 
         expect(createUser.execute(newUser)).rejects.toBeInstanceOf(AppError);
